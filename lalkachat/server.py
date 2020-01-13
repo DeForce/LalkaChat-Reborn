@@ -2,14 +2,12 @@ import asyncio
 import collections
 import logging
 import os
-import queue
-from concurrent.futures.thread import ThreadPoolExecutor
 
 import yaml
 from aiohttp import web
 from dotmap import DotMap
 
-from lalkachat import HTTP_FOLDER
+from __init__ import HTTP_FOLDER
 from message import Message
 from module.blacklist import Blacklist
 from service.sample import SampleService

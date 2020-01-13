@@ -6,7 +6,7 @@ from os import path
 from dotmap import DotMap
 import yaml
 
-from lalkachat import LOG_FOLDER, CONFIG_FOLDER
+from __init__ import LOG_FOLDER, CONFIG_FOLDER
 from server import Server
 
 
