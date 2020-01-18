@@ -9,9 +9,9 @@ DEFAULT_USERNAME = 'LalkaChat'
 
 
 class Message:
-    def __init__(self, text, channel=DEFAULT_CHANNEL, username=DEFAULT_USERNAME, mid=str(uuid.uuid1())):
+    def __init__(self, text, channel=DEFAULT_CHANNEL, username=DEFAULT_USERNAME, mid=None):
         self._timestamp = datetime.datetime.now()
-        self._id = mid
+        self._id = mid if mid else str(uuid.uuid1())
 
         self._channel = channel
         self._username = username

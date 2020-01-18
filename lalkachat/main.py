@@ -53,7 +53,7 @@ def load_profiles():
 if __name__ == '__main__':
     # Loading configuration
     if not os.path.isdir(CONFIG_FOLDER):
-        raise IOError(f'Path {CONFIG_FOLDER} is not a folder')
+        os.mkdir(CONFIG_FOLDER)
     elif os.path.exists(CONFIG_FOLDER):
         if path.exists(BASE_CONFIG_FILE):
             with open(BASE_CONFIG_FILE, 'r') as base_file:
