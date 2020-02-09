@@ -7,6 +7,7 @@ from dotmap import DotMap
 import yaml
 
 from __init__ import LOG_FOLDER, CONFIG_FOLDER
+from base import Config
 from server import Server
 
 
@@ -30,12 +31,21 @@ logging.getLogger('requests').setLevel(logging.ERROR)
 DEFAULT_PROFILE_NAME = 'default'
 BASE_CONFIG_FILE = path.join(CONFIG_FOLDER, 'base.yaml')
 
-base_config = DotMap({
-    'log_level': logging.getLevelName(logging.INFO),
-    'profile': DEFAULT_PROFILE_NAME,
-    'host': '0.0.0.0',
-    'port': '8082'
-})
+
+class BaseConfig(Config):
+    def __init__(self, b_config):
+        self.log_level = b_config.get('log_level', logging.getLevelName(logging.INFO))
+        self.profile = b_config.get('profile', DEFAULT_PROFILE_NAME)
+        self.host = b_config.get('host', '0.0.0.0')
+        self.port = b_config.get('port', 8082)
+
+    def save(self):
+        return {
+            'log_level': self.log_level,
+            'profile': self.profile,
+            'host': self.host,
+            'port': self.port
+        }
 
 
 def load_profiles():
@@ -52,18 +62,32 @@ def load_profiles():
 
 if __name__ == '__main__':
     # Loading configuration
+    yaml_data = {}
     if not os.path.isdir(CONFIG_FOLDER):
         os.mkdir(CONFIG_FOLDER)
     elif os.path.exists(CONFIG_FOLDER):
         if path.exists(BASE_CONFIG_FILE):
             with open(BASE_CONFIG_FILE, 'r') as base_file:
-                yaml_data = yaml.safe_load(base_file.read())
-                if yaml_data and isinstance(yaml_data, dict):
-                    base_config.update(yaml_data)
+                loaded = yaml.safe_load(base_file.read())
+                if loaded:
+                    yaml_data.update(loaded)
+
+    base_config = BaseConfig(yaml_data)
 
     root_logger.setLevel(base_config.log_level)
     profiles = collections.ChainMap(*load_profiles())
     active_profile = base_config.profile
 
+    if active_profile not in profiles:
+        profiles[active_profile] = DotMap()
+
     server = Server(profiles, active_profile, base_config)
     server.run_server()
+    profiles[base_config.profile] = server.save()
+
+    for profile, config in profiles.items():
+        with open(os.path.join(CONFIG_FOLDER, f'{profile}.yaml'), 'w') as p_config:
+            p_config.write(yaml.safe_dump(config))
+    with open(BASE_CONFIG_FILE, 'w') as b_file:
+        b_file.write(yaml.safe_dump(base_config.save()))
+    logging.info('Wrote configuration successfully, exiting')

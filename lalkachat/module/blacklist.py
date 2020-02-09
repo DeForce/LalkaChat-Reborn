@@ -2,4 +2,5 @@ from module import Module
 
 
 class Blacklist(Module):
-    pass
+    def save(self):
+        return {}

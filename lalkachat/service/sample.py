@@ -12,6 +12,9 @@ class SampleService(Service):
         thread = threading.Thread(target=self.send_loop, daemon=True)
         thread.start()
 
+    def save(self):
+        return {}
+
     def send_loop(self):
         loop = 0
         while True:

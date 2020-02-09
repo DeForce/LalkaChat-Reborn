@@ -1,12 +1,15 @@
 import asyncio
+from abc import ABC
 from queue import Queue
 
+from base import Base
 
-class Service:
+
+class Service(Base, ABC):
     def __init__(self, profiles, active_profile, queue: Queue):
+        super().__init__(profiles, active_profile)
+
         self.queue = queue
-        self.profiles = profiles
-        self.active_profile = active_profile
         self.loop = asyncio.get_event_loop()
 
     def send_message(self, message):
