@@ -26,7 +26,7 @@ class Message:
 
     @property
     def type(self):
-        return 'message'
+        return 'default'
 
     @property
     def platform(self):
@@ -76,3 +76,8 @@ class Message:
 
             'text': self._text,
         }
+
+
+class MessageHighlighted(Message):
+    def type(self):
+        return 'highlight'
