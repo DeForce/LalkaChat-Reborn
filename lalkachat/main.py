@@ -34,7 +34,7 @@ base_config = DotMap({
     'log_level': logging.getLevelName(logging.INFO),
     'profile': DEFAULT_PROFILE_NAME,
     'host': '0.0.0.0',
-    'port': '8081'
+    'port': '8082'
 })
 
 
