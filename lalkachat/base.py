@@ -15,8 +15,5 @@ class Base:
 
 
 class Config:
-    def update(self, data):
-        dir_keys = self.__dir__()
-        for key, value in data.items():
-            if key in dir_keys:
-                setattr(self, key, value)
+    def save(self):
+        raise NotImplementedError(f"Save should be implemented in {self.__class__.__name__}")

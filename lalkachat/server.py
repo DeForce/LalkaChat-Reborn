@@ -5,13 +5,13 @@ import os
 
 import yaml
 from aiohttp import web
-from dotmap import DotMap
 
 from __init__ import HTTP_FOLDER
 from base import Base, Config
 from message import Message
 from module.blacklist import Blacklist
 from service.sample import SampleService
+from service.twitchtv import TwitchTV
 
 DEFAULT_THEME_NAME = 'default'
 DEFAULT_WINDOW_NAME = 'default'
@@ -55,14 +55,10 @@ class ServerAPI:
         return web.json_response(self.config.windows[window].style)
 
 
-class WindowConfig:
-    theme = DEFAULT_THEME_NAME
-    style = get_theme_settings_default(DEFAULT_THEME_NAME)
-
-    def __init__(self, config=None):
-        if config:
-            self.theme = config['theme']
-            self.style = config['style']
+class WindowConfig(Config):
+    def __init__(self, config):
+        self.theme = config.get('theme', DEFAULT_THEME_NAME)
+        self.style = config.get('style', get_theme_settings_default(DEFAULT_THEME_NAME))
 
     def save(self):
         return {
@@ -71,13 +67,11 @@ class WindowConfig:
         }
 
 
-class ServerConfig:
-    active_window = DEFAULT_WINDOW_NAME
-    windows = {DEFAULT_WINDOW_NAME: WindowConfig()}
+class ServerConfig(Config):
+    windows = {DEFAULT_WINDOW_NAME: WindowConfig({})}
 
     def __init__(self, config):
-        if 'active_window' in config:
-            self.active_window = config['active_window']
+        self.active_window = config.get('active_window', DEFAULT_WINDOW_NAME)
         if 'windows' in config:
             self.populate_windows(config['windows'])
 
@@ -107,6 +101,7 @@ class Server(Base):
         ]
 
         self.services = [
+            TwitchTV(profiles, active_profile, self.queue),
             SampleService(profiles, active_profile, self.queue)
         ]
 
