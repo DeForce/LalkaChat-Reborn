@@ -14,7 +14,7 @@ from server import Server
 if not os.path.exists(LOG_FOLDER):
     os.makedirs(LOG_FOLDER)
 LOG_FILE = os.path.join(LOG_FOLDER, 'main.log')
-LOG_FORMAT = logging.Formatter("%(asctime)s [%(threadName) s%(name)s] [%(levelname)s]  %(message)s")
+LOG_FORMAT = logging.Formatter("%(asctime)s [%(threadName)s %(name)s] [%(levelname)s]  %(message)s")
 
 
 root_logger = logging.getLogger()

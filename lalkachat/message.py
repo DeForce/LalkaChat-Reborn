@@ -7,6 +7,13 @@ DEFAULT_PLATFORM_ID = 'lalkachat'
 DEFAULT_CHANNEL = 'system'
 DEFAULT_USERNAME = 'LalkaChat'
 
+EMOTE_FORMAT = ':emote;{}:'
+
+PLATFORM = {
+    'icon': DEFAULT_ICON,
+    'id': DEFAULT_PLATFORM_ID
+}
+
 
 class Message:
     def __init__(self, text, channel=DEFAULT_CHANNEL, username=DEFAULT_USERNAME, mid=None):
@@ -29,11 +36,12 @@ class Message:
         return 'default'
 
     @property
+    def message_type(self):
+        return 'message'
+
+    @property
     def platform(self):
-        return {
-            'icon': DEFAULT_ICON,
-            'id': DEFAULT_PLATFORM_ID
-        }
+        return PLATFORM
 
     @property
     def timestamp(self):
@@ -43,18 +51,21 @@ class Message:
     def unixtime(self):
         return time.mktime(self._timestamp.timetuple())
 
-    def to_web(self):
-        return {
-            'type': self.type,
-            'unixtime': self.unixtime,
-            'payload': self.payload
-        }
-
     def is_pm(self):
         return False
 
     def is_mention(self):
         return False
+
+    def add_emote(self, emote_name, emote_url):
+        self._emotes.append({'id': emote_name, 'url': emote_url})
+
+    def to_web(self):
+        return {
+            'type': self.message_type,
+            'unixtime': self.unixtime,
+            'payload': self.payload
+        }
 
     @property
     def payload(self):

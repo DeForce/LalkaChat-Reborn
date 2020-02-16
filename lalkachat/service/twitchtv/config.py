@@ -1,9 +1,16 @@
+import logging
 from typing import Dict
 
 from base import Config
+from secret import TWITCH_CLIENT_ID
 
 IRC_HOST = 'irc.twitch.tv'
 IRC_PORT = 6667
+
+HEADERS = {'Client-ID': TWITCH_CLIENT_ID,
+           'Accept': 'application/vnd.twitchtv.v5+json'}
+
+logger = logging.getLogger('twitch')
 
 
 class ChannelConfig(Config):
