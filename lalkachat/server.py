@@ -102,7 +102,7 @@ class Server(Base):
 
         self.services = [
             TwitchTV(profiles, active_profile, self.queue),
-            SampleService(profiles, active_profile, self.queue)
+            # SampleService(profiles, active_profile, self.queue)
         ]
 
         self.server_config = ServerConfig(self.class_configuration)

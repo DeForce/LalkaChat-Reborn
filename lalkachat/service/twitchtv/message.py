@@ -44,8 +44,7 @@ class TwitchMessage(Message):
 
     def add_emote(self, emote_id, **kwargs):
         emote_data = self.service.emotes[int(emote_id)]
-        super().add_emote(emote_id, emote_data)
-        pass
+        super().add_emote(emote_id, emote_data['images']['url'])
 
     @property
     def platform(self):
