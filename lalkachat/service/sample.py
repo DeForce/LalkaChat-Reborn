@@ -1,8 +1,8 @@
 import threading
 import time
 
+from base import Service
 from message import Message
-from service import Service
 
 
 class SampleService(Service):
@@ -18,7 +18,7 @@ class SampleService(Service):
     def send_loop(self):
         loop = 0
         while True:
-            message = Message(text=f'Please Ignore {loop}', channel='SampleChannel', username='LalkaNet')
+            message = Message(text=f'Please Ignore {loop}', channel_name='SampleChannel', username='LalkaNet')
             self.send_message(message)
             loop += 1
             time.sleep(1)

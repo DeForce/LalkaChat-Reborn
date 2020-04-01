@@ -10,7 +10,6 @@ from __init__ import HTTP_FOLDER
 from base import Base, Config
 from message import Message
 from module.blacklist import Blacklist
-from service.sample import SampleService
 from service.twitchtv import TwitchTV
 
 DEFAULT_THEME_NAME = 'default'
